@@ -72,6 +72,7 @@ public class MainActivity  extends AppCompatActivity {
         mxSession = new MXSession(hsConfig,dataHandler, this);
 
         mxSession.startEventStream("MyStream");
+
         mxSession.createRoom("Steffen","Bewerbung","Heimsoth", new ApiCallback<String>() {
             @Override
             public void onSuccess(String s) {
@@ -80,19 +81,41 @@ public class MainActivity  extends AppCompatActivity {
 
             @Override
             public void onNetworkError(Exception e) {
-                Log.e("login"," Network error");
+                Log.e("Room"," Network error");
             }
 
             @Override
             public void onMatrixError(MatrixError matrixError) {
-                Log.e("login"," Matrix error");
+                Log.e("Room"," Matrix error");
             }
 
             @Override
             public void onUnexpectedError(Exception e) {
-                Log.e("login"," Unexpected error");
+                Log.e("Room"," Unexpected error");
             }
         });
+
+//        mxSession.createRoom(new ApiCallback<String>() {
+//            @Override
+//            public void onSuccess(String s) {
+//                sendMessageToRoom(mxSession.getDataHandler().getRoom(s),mxSession,"Test");
+//            }
+//
+//            @Override
+//            public void onNetworkError(Exception e) {
+//                Log.e("Room"," Network error");
+//            }
+//
+//            @Override
+//            public void onMatrixError(MatrixError matrixError) {
+//                Log.e("Room"," Matrix error");
+//            }
+//
+//            @Override
+//            public void onUnexpectedError(Exception e) {
+//                Log.e("Room"," Unexpected error");
+//            }
+//        });
     }
     /**
      * Sends a message to the provided room.
