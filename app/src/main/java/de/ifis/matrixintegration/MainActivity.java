@@ -23,6 +23,10 @@ import org.matrix.androidsdk.rest.model.login.Credentials;
 public class MainActivity  extends AppCompatActivity {
 
     public static final String LOG_TAG = "MainActivity";
+
+    MXDataHandler dataHandler;
+    MXSession mxSession;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,13 +61,39 @@ public class MainActivity  extends AppCompatActivity {
 
     }
     private void createSession(HomeserverConnectionConfig hsConfig){
-        MXDataHandler dataHandler = new MXDataHandler(new MXMemoryStore(), hsConfig.getCredentials(), new MXDataHandler.InvalidTokenListener() {
+
+
+        dataHandler = new MXDataHandler(new MXMemoryStore(hsConfig.getCredentials(),this), hsConfig.getCredentials(), new MXDataHandler.InvalidTokenListener() {
             @Override
             public void onTokenCorrupted() {Log.e("dataHandler"," Token corrupted");}
         });
-        MXSession mxSession = new MXSession(hsConfig,dataHandler, this);
-        mxSession.startEventStream("a");
-    };
+
+
+        mxSession = new MXSession(hsConfig,dataHandler, this);
+
+        mxSession.startEventStream("MyStream");
+        mxSession.createRoom("Steffen","Bewerbung","Heimsoth", new ApiCallback<String>() {
+            @Override
+            public void onSuccess(String s) {
+                sendMessageToRoom(mxSession.getDataHandler().getRoom(s),mxSession,"Test");
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                Log.e("login"," Network error");
+            }
+
+            @Override
+            public void onMatrixError(MatrixError matrixError) {
+                Log.e("login"," Matrix error");
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                Log.e("login"," Unexpected error");
+            }
+        });
+    }
     /**
      * Sends a message to the provided room.
      *
