@@ -71,7 +71,7 @@ public class MainActivity  extends AppCompatActivity {
 
         mxSession = new MXSession(hsConfig,dataHandler, this);
 
-        mxSession.startEventStream("MyStream");
+        mxSession.startEventStream(null);
 
         mxSession.createRoom("Steffen","Bewerbung","Heimsoth", new ApiCallback<String>() {
             @Override
