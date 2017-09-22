@@ -1,6 +1,7 @@
 package de.ifis.matrixintegration;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,11 @@ public class MainActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.startActivity(new Intent(this, LoginActivity.class));
+        this.finish();
+
+
+
 
         final HomeserverConnectionConfig hsConfig = new HomeserverConnectionConfig(Uri.parse("https://demo.quvert.if-is.net"));
         new LoginRestClient(hsConfig).loginWithUser("sheimsoth", "matrix", new ApiCallback<Credentials>() {
@@ -38,7 +44,7 @@ public class MainActivity  extends AppCompatActivity {
             public void onSuccess(Credentials credentials) {
                 hsConfig.setCredentials(credentials);
                 Log.i("login"," Success");
-                createSession(hsConfig);
+                //createSession(hsConfig);
             }
 
             @Override
@@ -73,7 +79,7 @@ public class MainActivity  extends AppCompatActivity {
 
         mxSession.startEventStream(null);
 
-        mxSession.createRoom("Steffen","Bewerbung","Heimsoth", new ApiCallback<String>() {
+        mxSession.createRoom("Steffen","Bewerbung","Heimsoth#1", new ApiCallback<String>() {
             @Override
             public void onSuccess(String s) {
                 sendMessageToRoom(mxSession.getDataHandler().getRoom(s),mxSession,"Test");
